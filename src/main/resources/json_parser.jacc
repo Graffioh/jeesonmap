@@ -1,0 +1,65 @@
+%{
+
+import java.io.*;
+
+%}
+
+%class JsonParser
+%interface ParserTokens
+
+%semantic String
+
+%token OP_BRK CL_BRK STR NUM COM DD
+
+%%
+object:
+    enclosing_brackets { System.out.println("Found an object!!!"); }
+    ;
+
+key:
+    STR { $$ = $1; }
+    ;
+
+value:
+    STR { $$ = $1; }
+    | NUM { $$ = $1; }
+    ;
+
+pair:
+    key DD value { $$ = $1 + " " + $2 + " " + $3; }
+    ;
+
+pair_list:
+    pair { $$ = $1; }
+    | pair_list COM pair { $$ = $1 + ", " + $3; }
+    ;
+
+enclosing_brackets:
+    OP_BRK pair_list CL_BRK {
+           System.out.println("Found: " + $2);
+       }
+       ;
+%%
+
+private JsonLexer lexer;
+
+    public JsonParser(Reader reader)
+    {
+        lexer = new JsonLexer(reader);
+    }
+
+    public void yyerror(String error)
+    {
+        System.err.println("Error: " + error);
+    }
+
+    public static void main(String args[]) throws IOException
+    {
+        System.out.println("Interactive evaluation:");
+
+        JsonParser parser = new JsonParser(
+            new InputStreamReader(System.in));
+
+        parser.lexer.nextToken();
+        parser.parse();
+    }
