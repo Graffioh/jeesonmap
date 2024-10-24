@@ -1,6 +1,10 @@
 %{
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 %}
 
@@ -9,20 +13,33 @@ import java.io.*;
 
 %semantic String
 
-%token OP_BRK CL_BRK STR NUM COM DD
+%token OP_BRK CL_BRK STR NUM COM DD OP_SQR CL_SQR BOOL NULL
 
 %%
 object:
     enclosing_brackets { System.out.println("Found an object!!!"); }
     ;
 
-key:
-    STR { $$ = $1; }
+array:
+    OP_SQR value_list CL_SQR { System.out.println("Found an array: " + $2); }
     ;
 
 value:
     STR { $$ = $1; }
     | NUM { $$ = $1; }
+    | array { $$ = $1; }
+    | object { $$ = $1; }
+    | BOOL { $$ = $1; }
+    | NULL { $$ = $1; }
+    ;
+
+value_list:
+    value { $$ = $1; }
+    | value_list COM value { $$ = $1 + ", " + $3; }
+    ;
+
+key:
+    STR { $$ = $1; }
     ;
 
 pair:
@@ -55,10 +72,8 @@ private JsonLexer lexer;
 
     public static void main(String args[]) throws IOException
     {
-        System.out.println("Interactive evaluation:");
-
-        JsonParser parser = new JsonParser(
-            new InputStreamReader(System.in));
+        FileInputStream jsonFile = new FileInputStream("src/main/resources/jeeson.json");
+        JsonParser parser = new JsonParser(new InputStreamReader(jsonFile, Charset.forName("Cp1252")));
 
         parser.lexer.nextToken();
         parser.parse();
