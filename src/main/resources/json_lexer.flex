@@ -24,7 +24,6 @@ public int getToken()
 /* get the current token value */
 public String getSemantic()
 {
-    System.out.println("SEMANTIC: " + semantic);
     return semantic;
 }
 
@@ -40,10 +39,20 @@ public int nextToken()
         System.out.println(
             "IO exception occured:\n" + e);
     }
-    System.out.println("TOKEN: " + token);
     return token;
 }
+
+public int getLine() {
+    return yyline + 1;
+}
+
+public int getColumn() {
+    return yycolumn + 1;
+}
 %}
+
+%line
+%column
 
 open_bracket = \{
 string = \"([^\"\\\\]|\\\\[\"\\\\bfnrt])*\"
@@ -55,6 +64,7 @@ closed_square = \]
 boolean = true|false
 null = null
 closed_bracket = \}
+unquoted_key = [a-zA-Z][a-zA-Z0-9_]*[ \t]*:
 space = [ \t]+
 nl = \n | \r | \r\n
 
@@ -101,8 +111,17 @@ return NULL; }
 System.out.println("Recognized closed bracket: " + semantic);
 return CL_BRK; }
 
+{unquoted_key} {
+    semantic = yytext();
+    throw new RuntimeException("Error: Unquoted key '" + semantic + "' at line " + getLine() + ", column " + getColumn() + ". Keys must be enclosed in double quotes.");
+}
+
 {space} { /* Ignore space */ }
 {nl} { /* Ignore new line */ }
+
+. {
+  throw new RuntimeException("Illegal character '" + yytext() + "' at line " + getLine() + ", column " + getColumn());
+}
 
 <<EOF>> { System.out.println("Recognized end of file!"); return ENDINPUT; }
 
