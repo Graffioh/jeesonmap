@@ -13,33 +13,36 @@ import java.io.*;
 
 %{
 private int token;
-    private String semantic;
+private String semantic;
+private boolean eof = false;
 
-    /* get the current token code*/
-    public int getToken()
-    {
-        return token;
-    }
-    /* get the current token value */
-    public String getSemantic()
-    {
-        return semantic;
-    }
+/* get the current token code*/
+public int getToken()
+{
+    return token;
+}
+/* get the current token value */
+public String getSemantic()
+{
+    System.out.println("SEMANTIC: " + semantic);
+    return semantic;
+}
 
-    /* get the next token code */
-    public int nextToken()
+/* get the next token code */
+public int nextToken()
+{
+    try
     {
-        try
-        {
-            token = yylex();
-        }
-        catch (java.io.IOException e)
-        {
-            System.out.println(
-                "IO exception occured:\n" + e);
-        }
-        return token;
+        token = yylex();
     }
+    catch (java.io.IOException e)
+    {
+        System.out.println(
+            "IO exception occured:\n" + e);
+    }
+    System.out.println("TOKEN: " + token);
+    return token;
+}
 %}
 
 open_bracket = \{
@@ -47,11 +50,11 @@ string = \"([^\"\\\\]|\\\\[\"\\\\bfnrt])*\"
 number = [0-9]+
 double_dots = :
 comma = ,
-closed_bracket = \}
 open_square = \[
 closed_square = \]
 boolean = true|false
 null = null
+closed_bracket = \}
 space = [ \t]+
 nl = \n | \r | \r\n
 
@@ -78,10 +81,6 @@ return COM; }
 System.out.println("Recognized double dots: " + semantic);
 return DD; }
 
-{closed_bracket} { semantic = yytext();
-System.out.println("Recognized closed bracket: " + semantic);
-return CL_BRK; }
-
 {open_square} { semantic = yytext();
     System.out.println("Recognized open square bracket: " + semantic);
     return OP_SQR; }
@@ -95,9 +94,15 @@ System.out.println("Recognized boolean: " + semantic);
 return BOOL; }
 
 {null} { semantic = yytext();
-System.out.println("Recognized boolean: " + semantic);
+System.out.println("Recognized null: " + semantic);
 return NULL; }
 
+{closed_bracket} { semantic = yytext();
+System.out.println("Recognized closed bracket: " + semantic);
+return CL_BRK; }
+
 {space} { /* Ignore space */ }
-{nl} { return ENDINPUT; }
-. { System.out.println("Unexpected character: " + yytext()); }
+{nl} { /* Ignore new line */ }
+
+<<EOF>> { System.out.println("Recognized end of file!"); return ENDINPUT; }
+
