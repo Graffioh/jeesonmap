@@ -1,11 +1,11 @@
 %{
-package org.example;
 import java.io.*;
 import java.nio.charset.Charset;
 %}
 
 %class JsonParser
 %interface ParserTokens
+%package org.example
 
 %semantic String
 %token OP_BRK CL_BRK STR NUM COM DD OP_SQR CL_SQR BOOL NULL
@@ -123,11 +123,11 @@ pair_list:
    ;
 %%
 
-public JsonLexer lexer;
+private JsonLexer lexer;
 private String parsedResult;
 
-public JsonParser(Reader reader) {
-    lexer = new JsonLexer(reader);
+public JsonParser(JsonLexer lexer) {
+    this.lexer = lexer;
 }
 
 public void yyerror(String error) {
@@ -136,14 +136,4 @@ public void yyerror(String error) {
 
 public String getParsedResult() {
     return this.parsedResult;
-}
-
-public static void main(String args[]) throws IOException {
-    FileInputStream jsonFile = new FileInputStream("src/main/resources/jeeson.json");
-    JsonParser parser = new JsonParser(new InputStreamReader(jsonFile, Charset.forName("Cp1252")));
-
-    parser.lexer.nextToken();
-    parser.parse();
-
-    System.out.println("Parser run.");
 }

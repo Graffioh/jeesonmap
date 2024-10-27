@@ -9,9 +9,10 @@ public class Main {
             FileInputStream jsonFile = new FileInputStream("src/main/resources/jeeson.json");
             InputStreamReader reader = new InputStreamReader(jsonFile, Charset.forName("Cp1252"));
 
-            JsonParser parser = new JsonParser(reader);
+            JsonLexer lexer = new JsonLexer(reader);
+            lexer.nextToken();
 
-            parser.lexer.nextToken();
+            JsonParser parser = new JsonParser(lexer);
             parser.parse();
 
             String parsedResult = parser.getParsedResult();
