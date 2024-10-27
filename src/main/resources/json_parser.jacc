@@ -14,6 +14,7 @@ start:
    json {
        $$ = $1;
        System.out.println("Final JSON: " + $$);
+       this.parsedResult = $$;
    }
    ;
 
@@ -121,7 +122,8 @@ pair_list:
    ;
 %%
 
-private JsonLexer lexer;
+public JsonLexer lexer;
+private String parsedResult;
 
 public JsonParser(Reader reader) {
     lexer = new JsonLexer(reader);
@@ -131,6 +133,10 @@ public void yyerror(String error) {
     throw new RuntimeException("Parsing stopped because of this error: " + error);
 }
 
+public String getParsedResult() {
+    return this.parsedResult;
+}
+
 public static void main(String args[]) throws IOException {
     FileInputStream jsonFile = new FileInputStream("src/main/resources/jeeson.json");
     JsonParser parser = new JsonParser(new InputStreamReader(jsonFile, Charset.forName("Cp1252")));
@@ -138,5 +144,5 @@ public static void main(String args[]) throws IOException {
     parser.lexer.nextToken();
     parser.parse();
 
-    System.out.println("Parsing completed.");
+    System.out.println("Parser run.");
 }
