@@ -1,9 +1,9 @@
 # jeesonmap
-JSON parser that generate a map from a [JSON](https://www.json.org/json-en.html) using [JFlex]() and [Jacc]()
+JSON parser that generate a map from a [JSON](https://www.json.org/json-en.html) using [JFlex](https://www.jflex.de/) and [Jacc](https://web.cecs.pdx.edu/~mpj/jacc/)
 
 ## Installation
 
-You need to install JFlex ([link](https://www.jflex.de/manual.html#Installing)) and Jacc ([link](https://github.com/zipwith/jacc/tree/master?tab=readme-ov-file#installation))
+You need to install JFlex ([installation guide](https://www.jflex.de/manual.html#Installing)) and Jacc ([installation guide](https://github.com/zipwith/jacc/tree/master?tab=readme-ov-file#installation))
 
 Then you clone the repository
 
@@ -12,8 +12,24 @@ git clone https://github.com/yourusername/jeesonmap.git
 cd jeesonmap
 ~~~
 
+## Usage
 
-## How to use
+## Modify jeeson.json as per your preferences
+
+~~~sh
+src/main/java/resources/jeeson.json
+~~~
+
+Example jeeson.json content:
+
+~~~json
+{
+  "key1": "value1",
+  "key2": [1, true, null, "four", { "nestedKey": false }],
+  "keyArrayEmpty": [],
+  "keyObjectEmpty": {}
+}
+~~~
 
 ### Create the parser and compile the code
 
