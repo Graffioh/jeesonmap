@@ -3,6 +3,7 @@ package org.jeesonmap;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 
 public class Main {
@@ -23,8 +24,8 @@ public class Main {
 
             System.out.println("Parsed result: " + parsedResult + "\n");
             
-             if (parsedResult instanceof Map) {
-                Map<String, Object> jsonMap = (Map<String, Object>) parsedResult;
+            if (parsedResult instanceof JsonMap) {
+                JsonMap jsonMap = (JsonMap) parsedResult;
 
                 System.out.println("Map size: " + jsonMap.size());
                 System.out.println("Map keys: " + jsonMap.keySet());
@@ -32,10 +33,10 @@ public class Main {
 
                 System.out.println("GET VALUE WITH KEY1: " + jsonMap.get("key1"));
                 System.out.println("GET VALUE WITH KEY2: " + jsonMap.get("key2"));
-            } else if (parsedResult instanceof List) {
-                List<Object> jsonList = (List<Object>) parsedResult;
-                
-                Map<String, Object> firstElementMapFromJsonList = (Map<String, Object>) jsonList.getFirst();
+            } else if (parsedResult instanceof JsonArray) {
+                JsonArray jsonList = (JsonArray) parsedResult;
+
+                JsonMap firstElementMapFromJsonList = (JsonMap) jsonList.getFirst();
 
                 System.out.println("List size: " + jsonList.size() + "\n");
 

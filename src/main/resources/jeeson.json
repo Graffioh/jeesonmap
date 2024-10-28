@@ -1,6 +1,6 @@
-[{
+{
   "key1": "value1",
   "key2": [1, true, null, "four", { "nestedKey": false }],
   "keyArrayEmpty": [],
   "keyObjectEmpty": {}
-}]
+}

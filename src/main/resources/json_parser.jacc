@@ -1,8 +1,8 @@
 %{
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+import org.jeesonmap.JsonMap;
+import org.jeesonmap.JsonArray;
 %}
 
 %class JeesonParser
@@ -32,72 +32,72 @@ json:
 
 object:
    OP_BRK pair_list CL_BRK {
-       $$ = $2; // The result is the map created by pair_list
+       $$ = $2; 
    }
    | OP_BRK CL_BRK {
-       $$ = new HashMap<String, Object>(); // Empty map for empty JSON object
+       $$ = new JsonMap(); 
    }
    ;
 
 array:
    OP_SQR value_list CL_SQR {
-       $$ = $2; // The result is the list created by value_list
+       $$ = $2; 
    }
    | OP_SQR CL_SQR {
-       $$ = new ArrayList<Object>(); // Empty list for empty JSON array
+       $$ = new JsonArray(); 
    }
    ;
 
 value:
    STR {
-       $$ = (String) $1; // Ensures the value is treated as a string
+       $$ = (String) $1; 
    }
    | NUM {
-       $$ = Integer.parseInt((String) $1); // Parse the string to an integer
+       $$ = Integer.parseInt((String) $1); 
    }
    | array {
-       $$ = $1; // Already an Object, no need for casting
+       $$ = $1; 
    }
    | object {
-       $$ = $1; // Already an Object, no need for casting
+       $$ = $1; 
    }
    | BOOL {
-       $$ = Boolean.parseBoolean((String) $1); // Parse the string to a boolean
+       $$ = Boolean.parseBoolean((String) $1); 
    }
    | NULL {
-       $$ = null; // null value
+       $$ = null; 
    }
    ;
 
 value_list:
    value {
-       List<Object> list = new ArrayList<>();
+       JsonArray list = new JsonArray();
        list.add($1);
        $$ = list;
    }
    | value_list COM value {
-       ((List<Object>)$1).add($3);
+       ((JsonArray) $1).add($3);
        $$ = $1;
    }
    | value_list COM {
-        yyerror("There is an extra comma in the array at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Remove the comma or add another value.");
+       yyerror("There is an extra comma in the array at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Remove the comma or add another value.");
    }
    ;
 
 key:
    STR {
-       $$ = (String) $1; 
+       $$ = (String) $1;
    }
    ;
 
 pair:
    key DD value {
-       Map<String, Object> pairMap = new HashMap<>();
-       pairMap.put((String) $1, $3); // Cast key to String for map
+       JsonMap pairMap = new JsonMap();
+       pairMap.put((String) $1, $3);
        $$ = pairMap;
    }
    | key value {
-        yyerror("There is a missing colon (:) at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Maybe you forgot it while adding a new key/value pair.");
+       yyerror("There is a missing colon (:) at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Maybe you forgot it while adding a new key/value pair.");
    }
    ;
 
@@ -106,11 +106,11 @@ pair_list:
        $$ = $1;
    }
    | pair_list COM pair {
-       ((Map<String, Object>)$1).putAll((Map<String, Object>)$3);
+       ((JsonMap) $1).putAll((JsonMap) $3);
        $$ = $1;
    }
    | pair_list COM {
-        yyerror("There is an extra comma in the object at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Remove the comma or add another key/value pair.");
+       yyerror("There is an extra comma in the object at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Remove the comma or add another key/value pair.");
    }
    ;
 %%
