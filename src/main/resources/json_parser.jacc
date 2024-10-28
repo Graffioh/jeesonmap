@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 
 %class JsonParser
 %interface ParserTokens
-%package org.example
+%package org.jeesonmap
 
 %semantic String
 %token OP_BRK CL_BRK STR NUM COM DD OP_SQR CL_SQR BOOL NULL

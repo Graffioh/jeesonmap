@@ -1,4 +1,4 @@
-package org.example;
+package org.jeesonmap;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -18,10 +18,11 @@ public class Main {
             String parsedResult = parser.getParsedResult();
 
             System.out.println("Parsing completed successfully!!!.\n");
-            System.out.println("parsed result: " + parsedResult);
 
+            System.out.println("parsed result (string): " + parsedResult);
+
+            System.out.println("parsed result (map): WIP");
         } catch (Exception e) {
-            // Handle exceptions
             System.err.println("Error occurred during parsing: " + e.getMessage());
             e.printStackTrace();
         }

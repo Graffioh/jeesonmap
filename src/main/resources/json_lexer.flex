@@ -1,5 +1,5 @@
     /* DIRECTIVES */
-package org.example;
+package org.jeesonmap;
 import java.io.*;
 
 %%
