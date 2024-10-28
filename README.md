@@ -14,7 +14,7 @@ cd jeesonmap
 
 ## Usage
 
-## Modify jeeson.json as per your preferences
+### Modify jeeson.json as per your preferences
 
 ~~~sh
 src/main/java/resources/jeeson.json
@@ -30,6 +30,8 @@ Example jeeson.json content:
   "keyObjectEmpty": {}
 }
 ~~~
+
+(Arrays of objects are not fully supported yet)
 
 ### Create the parser and compile the code
 
