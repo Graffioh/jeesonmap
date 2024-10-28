@@ -24,8 +24,8 @@ public class Main {
 
             System.out.println("Parsed result: " + parsedResult + "\n");
             
-            if (parsedResult instanceof JsonMap) {
-                JsonMap jsonMap = (JsonMap) parsedResult;
+            if (parsedResult instanceof JeesonMap) {
+                JeesonMap jsonMap = (JeesonMap) parsedResult;
 
                 System.out.println("Map size: " + jsonMap.size());
                 System.out.println("Map keys: " + jsonMap.keySet());
@@ -33,10 +33,10 @@ public class Main {
 
                 System.out.println("GET VALUE WITH KEY1: " + jsonMap.get("key1"));
                 System.out.println("GET VALUE WITH KEY2: " + jsonMap.get("key2"));
-            } else if (parsedResult instanceof JsonArray) {
-                JsonArray jsonList = (JsonArray) parsedResult;
+            } else if (parsedResult instanceof JeesonArray) {
+                JeesonArray jsonList = (JeesonArray) parsedResult;
 
-                JsonMap firstElementMapFromJsonList = (JsonMap) jsonList.getFirst();
+                JeesonMap firstElementMapFromJsonList = (JeesonMap) jsonList.getFirst();
 
                 System.out.println("List size: " + jsonList.size() + "\n");
 

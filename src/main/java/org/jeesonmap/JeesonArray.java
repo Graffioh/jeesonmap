@@ -3,12 +3,12 @@ package org.jeesonmap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonArray extends ArrayList<Object> {
-    public JsonArray() {
+public class JeesonArray extends ArrayList<Object> {
+    public JeesonArray() {
         super();
     }
 
-    public JsonArray(List<Object> list) {
+    public JeesonArray(List<Object> list) {
         super(list);
     }
 }

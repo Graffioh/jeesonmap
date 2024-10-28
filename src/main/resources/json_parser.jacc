@@ -1,8 +1,8 @@
 %{
 import java.util.Map;
 import java.util.List;
-import org.jeesonmap.JsonMap;
-import org.jeesonmap.JsonArray;
+import org.jeesonmap.JeesonMap;
+import org.jeesonmap.JeesonArray;
 %}
 
 %class JeesonParser
@@ -35,7 +35,7 @@ object:
        $$ = $2; 
    }
    | OP_BRK CL_BRK {
-       $$ = new JsonMap(); 
+       $$ = new JeesonMap(); 
    }
    ;
 
@@ -44,7 +44,7 @@ array:
        $$ = $2; 
    }
    | OP_SQR CL_SQR {
-       $$ = new JsonArray(); 
+       $$ = new JeesonArray(); 
    }
    ;
 
@@ -71,12 +71,12 @@ value:
 
 value_list:
    value {
-       JsonArray list = new JsonArray();
+       JeesonArray list = new JeesonArray();
        list.add($1);
        $$ = list;
    }
    | value_list COM value {
-       ((JsonArray) $1).add($3);
+       ((JeesonArray) $1).add($3);
        $$ = $1;
    }
    | value_list COM {
@@ -92,7 +92,7 @@ key:
 
 pair:
    key DD value {
-       JsonMap pairMap = new JsonMap();
+       JeesonMap pairMap = new JeesonMap();
        pairMap.put((String) $1, $3);
        $$ = pairMap;
    }
@@ -106,7 +106,7 @@ pair_list:
        $$ = $1;
    }
    | pair_list COM pair {
-       ((JsonMap) $1).putAll((JsonMap) $3);
+       ((JeesonMap) $1).putAll((JeesonMap) $3);
        $$ = $1;
    }
    | pair_list COM {
