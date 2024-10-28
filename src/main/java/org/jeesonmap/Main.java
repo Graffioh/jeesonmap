@@ -3,6 +3,7 @@ package org.jeesonmap;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,8 +32,16 @@ public class Main {
 
                 System.out.println("GET VALUE WITH KEY1: " + jsonMap.get("key1"));
                 System.out.println("GET VALUE WITH KEY2: " + jsonMap.get("key2"));
+            } else if (parsedResult instanceof List) {
+                List<Object> jsonList = (List<Object>) parsedResult;
+                
+                Map<String, Object> firstElementMapFromJsonList = (Map<String, Object>) jsonList.getFirst();
+
+                System.out.println("List size: " + jsonList.size() + "\n");
+
+                System.out.println("GET VALUE WITH KEY2 from first object element: " + firstElementMapFromJsonList.get("key2"));
             } else {
-                System.out.println("Parsed result is not a JSON object.");
+                System.out.println("Parsed result is not a JSON object or array.");
             }
         } catch (Exception e) {
             System.err.println("Error occurred during parsing: " + e.getMessage());
