@@ -10,10 +10,10 @@ public class Main {
             FileInputStream jsonFile = new FileInputStream("src/main/resources/jeeson.json");
             InputStreamReader reader = new InputStreamReader(jsonFile, Charset.forName("Cp1252"));
 
-            JsonLexer lexer = new JsonLexer(reader);
+            JeesonLexer lexer = new JeesonLexer(reader);
             lexer.nextToken();
 
-            JsonParser parser = new JsonParser(lexer);
+            JeesonParser parser = new JeesonParser(lexer);
             parser.parse();
 
             Object parsedResult = parser.getParsedResult();

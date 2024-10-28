@@ -5,8 +5,8 @@ import java.io.*;
 %%
     /* RULES */
 
-%class JsonLexer
-%implements ParserTokens
+%class JeesonLexer
+%implements JeesonParserTokens
 
 %function yylex
 %int

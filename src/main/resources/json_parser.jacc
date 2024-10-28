@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 %}
 
-%class JsonParser
-%interface ParserTokens
+%class JeesonParser
+%interface JeesonParserTokens
 %package org.jeesonmap
 
 %semantic Object
@@ -115,10 +115,10 @@ pair_list:
    ;
 %%
 
-private JsonLexer lexer;
+private JeesonLexer lexer;
 private Object parsedResult;
 
-public JsonParser(JsonLexer lexer) {
+public JeesonParser(JeesonLexer lexer) {
     this.lexer = lexer;
 }
 
