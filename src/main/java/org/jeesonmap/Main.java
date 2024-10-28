@@ -2,6 +2,7 @@ package org.jeesonmap;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,13 +16,24 @@ public class Main {
             JsonParser parser = new JsonParser(lexer);
             parser.parse();
 
-            String parsedResult = parser.getParsedResult();
+            Object parsedResult = parser.getParsedResult();
 
             System.out.println("Parsing completed successfully!!!.\n");
 
-            System.out.println("parsed result (string): " + parsedResult);
+            System.out.println("Parsed result: " + parsedResult + "\n");
+            
+             if (parsedResult instanceof Map) {
+                Map<String, Object> jsonMap = (Map<String, Object>) parsedResult;
 
-            System.out.println("parsed result (map): WIP");
+                System.out.println("Map size: " + jsonMap.size());
+                System.out.println("Map keys: " + jsonMap.keySet());
+                System.out.println("Map values: " + jsonMap.values() + "\n");
+
+                System.out.println("GET VALUE WITH KEY1: " + jsonMap.get("key1"));
+                System.out.println("GET VALUE WITH KEY2: " + jsonMap.get("key2"));
+            } else {
+                System.out.println("Parsed result is not a JSON object.");
+            }
         } catch (Exception e) {
             System.err.println("Error occurred during parsing: " + e.getMessage());
             e.printStackTrace();

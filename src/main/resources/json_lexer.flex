@@ -75,9 +75,11 @@ nl = \n | \r | \r\n
  System.out.println("Recognized open bracket: " + semantic);
  return OP_BRK; }
 
-{string} { semantic = yytext();
-System.out.println("Recognized string: " + semantic);
-return STR; }
+{string} {
+    semantic = yytext().substring(1, yytext().length() - 1);  
+    System.out.println("Recognized string: " + semantic);
+    return STR;
+}
 
 {number} { semantic = yytext();
 System.out.println("Recognized number: " + semantic);

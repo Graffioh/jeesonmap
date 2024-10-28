@@ -1,20 +1,22 @@
 %{
-import java.io.*;
-import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 %}
 
 %class JsonParser
 %interface ParserTokens
 %package org.jeesonmap
 
-%semantic String
+%semantic Object
 %token OP_BRK CL_BRK STR NUM COM DD OP_SQR CL_SQR BOOL NULL
 
 %%
+
 start:
    json {
        $$ = $1;
-       System.out.println("Final JSON: " + $$);
        this.parsedResult = $$;
    }
    ;
@@ -22,69 +24,60 @@ start:
 json:
    object {
        $$ = $1;
-       System.out.println("Parsed object: " + $$);
    }
    | array {
        $$ = $1;
-       System.out.println("Parsed array: " + $$);
    }
    ;
 
 object:
    OP_BRK pair_list CL_BRK {
-       $$ = "{" + $2 + "}";
-       System.out.println("Built object: " + $$);
+       $$ = $2; // The result is the map created by pair_list
    }
    | OP_BRK CL_BRK {
-       $$ = "{}";
+       $$ = new HashMap<String, Object>(); // Empty map for empty JSON object
    }
    ;
 
 array:
    OP_SQR value_list CL_SQR {
-       $$ = "[" + $2 + "]";
-       System.out.println("Built array: " + $$);
+       $$ = $2; // The result is the list created by value_list
    }
    | OP_SQR CL_SQR {
-       $$ = "[]";
+       $$ = new ArrayList<Object>(); // Empty list for empty JSON array
    }
    ;
 
 value:
    STR {
-       $$ = $1;
-       System.out.println("Value (string): " + $$);
+       $$ = (String) $1; // Ensures the value is treated as a string
    }
    | NUM {
-       $$ = $1;
-       System.out.println("Value (number): " + $$);
+       $$ = Integer.parseInt((String) $1); // Parse the string to an integer
    }
    | array {
-       $$ = $1;
-       System.out.println("Value (array): " + $$);
+       $$ = $1; // Already an Object, no need for casting
    }
    | object {
-       $$ = $1;
-       System.out.println("Value (object): " + $$);
+       $$ = $1; // Already an Object, no need for casting
    }
    | BOOL {
-       $$ = $1;
-       System.out.println("Value (boolean): " + $$);
+       $$ = Boolean.parseBoolean((String) $1); // Parse the string to a boolean
    }
    | NULL {
-       $$ = $1;
-       System.out.println("Value (null): " + $$);
+       $$ = null; // null value
    }
    ;
 
 value_list:
    value {
-       $$ = $1;
-       System.out.println("Starting value list: " + $$);
+       List<Object> list = new ArrayList<>();
+       list.add($1);
+       $$ = list;
    }
    | value_list COM value {
-       $$ = $1 + ", " + $3;
-       System.out.println("Growing value list: " + $$);
+       ((List<Object>)$1).add($3);
+       $$ = $1;
    }
    | value_list COM {
         yyerror("There is an extra comma in the array at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Remove the comma or add another value.");
@@ -93,15 +86,15 @@ value_list:
 
 key:
    STR {
-       $$ = $1;
-       System.out.println("Found key: " + $$);
+       $$ = (String) $1; 
    }
    ;
 
 pair:
    key DD value {
-       $$ = $1 + ": " + $3;
-       System.out.println("Built pair: " + $$);
+       Map<String, Object> pairMap = new HashMap<>();
+       pairMap.put((String) $1, $3); // Cast key to String for map
+       $$ = pairMap;
    }
    | key value {
         yyerror("There is a missing colon (:) at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Maybe you forgot it while adding a new key/value pair.");
@@ -111,11 +104,10 @@ pair:
 pair_list:
    pair {
        $$ = $1;
-       System.out.println("Starting pair list: " + $$);
    }
    | pair_list COM pair {
-       $$ = $1 + ", " + $3;
-       System.out.println("Growing pair list: " + $$);
+       ((Map<String, Object>)$1).putAll((Map<String, Object>)$3);
+       $$ = $1;
    }
    | pair_list COM {
         yyerror("There is an extra comma in the object at line " + lexer.getLine() + ", column " + lexer.getColumn() + "!!! Remove the comma or add another key/value pair.");
@@ -124,7 +116,7 @@ pair_list:
 %%
 
 private JsonLexer lexer;
-private String parsedResult;
+private Object parsedResult;
 
 public JsonParser(JsonLexer lexer) {
     this.lexer = lexer;
@@ -134,6 +126,6 @@ public void yyerror(String error) {
     throw new RuntimeException("Parsing stopped because of this error: " + error);
 }
 
-public String getParsedResult() {
+public Object getParsedResult() {
     return this.parsedResult;
 }
