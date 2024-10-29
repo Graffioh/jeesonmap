@@ -1,6 +1,7 @@
 package org.jeesonmap;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 public class Main {
@@ -31,6 +32,7 @@ public class Main {
                 System.out.println("GET VALUE WITH KEY1: " + jsonMap.get("key1"));
                 System.out.println("GET VALUE WITH KEY2: " + jsonMap.get("key2"));
             } else if (parsedResult instanceof JeesonArray) {
+                // Array at the root level not fully supported yet
                 JeesonArray jsonList = (JeesonArray) parsedResult;
 
                 JeesonMap firstElementMapFromJsonList = (JeesonMap) jsonList.getFirst();

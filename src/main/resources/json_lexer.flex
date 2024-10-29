@@ -14,7 +14,6 @@ import java.io.*;
 %{
 private int token;
 private String semantic;
-private boolean eof = false;
 
 /* get the current token code*/
 public int getToken()

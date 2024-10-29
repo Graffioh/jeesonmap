@@ -31,7 +31,7 @@ Example jeeson.json content:
 }
 ~~~
 
-(Arrays of objects are not fully supported yet)
+(Array at the root level is not fully supported yet)
 
 ### Create the parser and compile the code
 
@@ -57,5 +57,5 @@ To clean up the generated Lexer and Parser files, run:
 ./src/main/resources/create_parser.sh clean
 ```
 
-## Blog post coming soon...
+## [Blog post](https://graffioh.com/blog/post/29-10-2024-JSON-parser-with-JFlex-and-Jacc)
 
